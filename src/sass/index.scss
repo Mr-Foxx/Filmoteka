@@ -1,0 +1,121 @@
+
+
+.header-section{
+    background-image: url('../images/abstract-background-with-red-lines\ 1.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 42px;
+    padding-bottom: 89px;
+}
+.input{
+    width: 392px;
+    height: 19px;
+    color: #fff;
+    background-color: rgba(0,0,0,0);
+    border: none;
+    border-bottom: 0.5px solid #fff;
+    position: relative;
+    
+}
+.header-wrap_home{
+    align-items: center;
+    justify-content: center;
+    display: flex;
+}
+
+
+.movie-start{
+// display: flex;
+// justify-content: center;
+//     align-items: center;
+}
+
+.img-start{
+    width: 395px;
+    height: 574px;
+    
+}
+.gallery-start {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 32px;
+    justify-content: center;
+    align-items: center;
+    // margin: 0 auto;
+    width: 100%;
+    padding: 60px 32px 0;
+  }
+.gallery-start_1{
+    // width: 100%;
+    // padding: 60px 32px 0;
+    // width: 1280;
+    // padding: 0px 20px 20px 0px;
+}
+
+.movie-details_start{}
+
+// =====модалка старт=====
+
+.film-modal-content {
+    background-color: #fff;
+    padding: 10px 10px 35px;
+    transition: transform .5s cubic-bezier(.075, .82, .165, 1);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%)scale(1);
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.modal__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal__content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    border-radius: 5px;
+    padding: 20px;
+}
+
+.modal__content img {
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    margin-bottom: 20px;
+}
+
+.movie-details_modal {
+    text-align: center;
+}
+
+.movie-details_modal h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.movie-details_modal p {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
