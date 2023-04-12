@@ -1,7 +1,7 @@
 
 
 .header-section{
-    background-image: url('../images/abstract-background-with-red-lines\ 1.jpg');
+    background-image: url('../images/abstract-background-with-red-lines\ .jpg');
     background-repeat: no-repeat;
     background-size: cover;
     margin-left: auto;
@@ -9,20 +9,61 @@
     padding-top: 42px;
     padding-bottom: 89px;
 }
+.container{
+        max-width: 1280px;
+            align-items: center;
+            // margin-bottom: 60px;
+            margin-left: auto;
+            margin-right: auto;
+            padding-top: 40px;
+            padding-left: 80px;
+            // padding-right: 20px;
+            display: flex;
+}
 .input{
-    width: 392px;
-    height: 19px;
-    color: #fff;
-    background-color: rgba(0,0,0,0);
+    width: 177px;
+    height: 42px;
+    padding-left: 17px;
+    background-color: #FFFFFF;
+    border-radius: 100px;
     border: none;
-    border-bottom: 0.5px solid #fff;
+    // border-bottom: 0.5px solid #fff;
     position: relative;
     
 }
+.button_search{
+    background-image: url('../images/search\ 2.png');
+    background-color: #FFFFFF;
+    width: 16px;
+    height: 16px;
+    position: relative;
+    right: 40px;
+    border: none;
+    background-repeat: no-repeat;
+        background-size: cover;
+
+}
+.button-home{
+    width: 99px;
+    height: 42px;
+        // color: #fff;
+        background-color: #FFFFFF;
+        border-radius: 100px;
+        border: none;
+}
+.button-library{
+    width: 117px;
+    height: 42px;
+        // color: #fff;
+        background-color: #FFFFFF;
+        border-radius: 100px;
+        border: none;
+}
 .header-wrap_home{
-    align-items: center;
-    justify-content: center;
+    // align-items: center;
+    // justify-content: center;
     display: flex;
+    // margin-left: 100px;
 }
 
 
@@ -94,20 +135,29 @@
     transform: translate(-50%, -50%);
     background-color: #fff;
     border-radius: 5px;
-    padding: 20px;
+    padding: 12px;
+    display: flex;
+    width: 806px;
+    height: 558px;
 }
 
 .modal__content img {
     width: 100%;
-    max-width: 400px;
+    max-width: 375px;
     height: auto;
+    max-height: 478px;
     display: block;
-    margin: 0 auto;
-    margin-bottom: 20px;
+    // margin: 0 auto;
+    // margin-bottom: 20px;
+    margin: 40px 0px;
+    
 }
 
 .movie-details_modal {
-    text-align: center;
+    display: flex;
+}
+.text-details_modal{
+    display: flex;
 }
 
 .movie-details_modal h2 {
@@ -119,3 +169,24 @@
     font-size: 18px;
     margin-bottom: 10px;
 }
+.modal__list{
+    display: flex;
+}
+
+// ======watched queue button=======
+
+// .button_watched{
+//     width: 120px;
+//         height: 42px;
+//         // color: #fff;
+//         background-color: #FFFFFF;
+//         border-radius: 100px;
+// }
+
+// .button_queue {
+//     width: 86px;
+//     height: 42px;
+//     // color: #fff;
+//     background-color: #FFFFFF;
+//     border-radius: 100px
+// }
