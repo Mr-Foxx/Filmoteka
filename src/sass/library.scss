@@ -1,4 +1,4 @@
-.button_watched {
+.button__libraty-watched {
     width: 120px;
     height: 42px;
     // color: #fff;
@@ -6,10 +6,94 @@
     border-radius: 100px;
 }
 
-.button_queue {
+.button__library-queue {
     width: 86px;
     height: 42px;
     // color: #fff;
     background-color: #FFFFFF;
     border-radius: 100px
+}
+
+.button-home {
+    width: 99px;
+    height: 42px;
+    color: #000000;
+    background-color: #ffffff;
+    border-radius: 100px;
+    border: none;
+}
+
+.button-library {
+    width: 117px;
+    height: 42px;
+    color: #fff;
+        background-color: #000000;
+    border-radius: 100px;
+    border: none;
+}
+
+.button-watchq-ueue{
+    margin-left: 700px;
+}
+
+.empty-page{
+    background-image: url('../images/ticket-2974645_1920.jpg');
+    background-repeat: no-repeat;
+        background-size: cover;
+        width: 768px;
+            height: 512px;
+        margin-left: auto;
+        margin-right: auto;
+}
+.empty-text{
+        align-items: center;
+            display: flex;
+            justify-content: center;
+            font-size: 40px;
+}
+
+// ========modal======
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.modal__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal__content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    border-radius: 5px;
+    padding: 12px;
+    display: flex;
+    width: 806px;
+    height: 558px;
+}
+
+.modal__content img {
+    width: 100%;
+    max-width: 375px;
+    height: auto;
+    max-height: 478px;
+    display: block;
+    // margin: 0 auto;
+    // margin-bottom: 20px;
+    margin: 40px 0px;
+
 }

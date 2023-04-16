@@ -7,6 +7,7 @@ import Notiflix from 'notiflix';
 const container = document.querySelector('.gallery-start');
 const form = document.querySelector('.search-form');
 const inputElement = document.querySelector('input[name="searchQuery"]');
+const formTextContainer = document.querySelector('.form-text');
 
 const BASE_URL = 'https://api.themoviedb.org/3/';
 const KEY = '9658d89d84efdefd667887b926d66a88';
@@ -63,7 +64,12 @@ async function fetchSerchForm(evt) {
     const movies = await fetchMovie(inputValue);
 
     if (movies.results.length === 0) {
+      formTextContainer.innerHTML =
+        'Search result not successful.<br/> Enter the correct movie name.';
       Notiflix.Notify.info('Sorry, but nothing was found for your request');
+      setTimeout(function () {
+        formTextContainer.innerHTML = '';
+      }, 3000);
     } else {
       renderMovie(movies);
       clearValue();
@@ -117,10 +123,14 @@ async function renderMovie(movies) {
 // ======modal=====
 
 async function fetchMovieDetails(movieId) {
-  const response = await axios.get(
-    `https://api.themoviedb.org/3/movie/${movieId}?api_key=${KEY}`
-  );
-  return response.data;
+  try {
+    const response = await axios.get(
+      `https://api.themoviedb.org/3/movie/${movieId}?api_key=${KEY}`
+    );
+    return response.data;
+  } catch (error) {
+    Notiflix.Report('Error', 'An error occurred while fetching movie details');
+  }
 }
 
 function showModal(movie) {
@@ -144,8 +154,8 @@ function showModal(movie) {
         <p class="abaut"> ABOUT </p> 
         <p>  Description: ${movie.overview}</p> <!-- Доданий опис -->
         <div class="modal__buttons"> 
-          <button class="modal__button">ADD TO WATCHED</button>
-          <button class="modal__button">ADD TO QUEUE</button>
+          <button class="modal__button-watched">ADD TO WATCHED</button>
+          <button class="modal__button-queue">ADD TO QUEUE</button>
         </div>
       </div>
     </div>

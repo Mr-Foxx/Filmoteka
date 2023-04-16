@@ -1,6 +1,7 @@
 import axios from 'axios';
 import $ from 'jquery';
 import Notiflix from 'notiflix';
+//import XXX from './library';
 
 const container = document.querySelector('.gallery-start');
 
@@ -30,12 +31,16 @@ const genres = {
 };
 
 async function fetchMovies() {
-  const response = await axios.get(`${BASE_URL}movie/now_playing`, {
-    params: {
-      api_key: KEY,
-    },
-  });
-  return response.data.results;
+  try {
+    const response = await axios.get(
+      `${BASE_URL}movie/now_playing?api_key=${KEY}`
+    );
+
+    return response.data.results;
+  } catch (error) {
+    console.error(error);
+    throw new Error('Error fetching movies');
+  }
 }
 
 function renderMovies(movies) {
@@ -77,10 +82,66 @@ function renderMovies(movies) {
 // ================
 
 async function fetchMovieDetails(movieId) {
-  const response = await axios.get(
-    `https://api.themoviedb.org/3/movie/${movieId}?api_key=${KEY}`
-  );
-  return response.data;
+  try {
+    const response = await axios.get(
+      `https://api.themoviedb.org/3/movie/${movieId}?api_key=${KEY}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw new Error('Error fetching movie details');
+  }
+}
+
+function click(movie) {
+  console.log('fn click in library');
+
+  const watchedBtn = document.querySelector('.modal__button-watched');
+  const queueBtn = document.querySelector('.modal__button-queue');
+  //   const queueContainet = document.querySelector('.queue-container');
+
+  watchedBtn.addEventListener('click', () => {
+    let storedMovies = JSON.parse(localStorage.getItem('watchMovies')) || [];
+
+    const isMovieExists = storedMovies.some(
+      storedMovie => storedMovie.id === movie.id
+    );
+
+    if (isMovieExists) {
+      storedMovies = storedMovies.filter(
+        storedMovie => storedMovie.id !== movie.id
+      );
+      Notiflix.Notify.info('movie removed from watched');
+    } else {
+      storedMovies.push(movie);
+      Notiflix.Notify.success('Movie added to watch');
+    }
+
+    localStorage.setItem('watchMovies', JSON.stringify(storedMovies));
+    //renderMovies(storedMovies);
+  });
+
+  queueBtn.addEventListener('click', () => {
+    let storedQueueMovies =
+      JSON.parse(localStorage.getItem('queueMovies')) || [];
+
+    const isMovieExists = storedQueueMovies.some(
+      storedMovie => storedMovie.id === movie.id
+    );
+
+    if (isMovieExists) {
+      storedQueueMovies = storedQueueMovies.filter(
+        storedMovie => storedMovie.id !== movie.id
+      );
+      Notiflix.Notify.info('movie removed from watched');
+    } else {
+      storedQueueMovies.push(movie);
+      Notiflix.Notify.success('Movie added to watch');
+    }
+
+    localStorage.setItem('queueMovies', JSON.stringify(storedQueueMovies));
+    //renderMovies(storedMovies);
+  });
 }
 
 function showModal(movie) {
@@ -104,8 +165,8 @@ function showModal(movie) {
         <p class="abaut"> ABOUT </p>
         <p>Description: ${movie.overview}</p> <!-- Доданий опис -->
         <div class="modal__buttons"> 
-          <button class="modal__button">ADD TO WATCHED</button>
-          <button class="modal__button">ADD TO QUEUE</button>
+          <button class="modal__button-watched">ADD TO WATCHED</button>
+          <button class="modal__button-queue">ADD TO QUEUE</button>
         </div>
       </div>
     </div>
@@ -113,21 +174,40 @@ function showModal(movie) {
 
   const modal = document.querySelector('.modal');
   modal.style.display = 'block';
+
+  click(movie);
 }
 
+// Функція, що отримує список фільмів та відображає їх
 async function renderStartMovies() {
-  const movies = await fetchMovies();
-  renderMovies(movies);
+  try {
+    const movies = await fetchMovies();
+    renderMovies(movies);
 
+    addClickEventListeners(movies);
+    addOverlayClickListener();
+  } catch (error) {
+    console.error(error);
+    throw new Error('Error rendering start movies');
+  }
+}
+
+// Функція, що додає події на зображення фільмів
+function addClickEventListeners(movies) {
   const imgStartElements = document.querySelectorAll('.img-start');
+
   imgStartElements.forEach((imgStartElement, index) => {
     imgStartElement.addEventListener('click', async () => {
       const movieDetails = await fetchMovieDetails(movies[index].id);
       showModal(movieDetails);
     });
   });
+}
 
+// Функція, що додає подію на клік по оверлею модального вікна
+function addOverlayClickListener() {
   const modalOverlay = document.querySelector('.modal__overlay');
+
   modalOverlay.addEventListener('click', () => {
     const modal = document.querySelector('.modal');
     modal.style.display = 'none';
@@ -135,8 +215,6 @@ async function renderStartMovies() {
 }
 
 renderStartMovies();
-
-export default fetchMovies;
 
 // =================
 
@@ -225,6 +303,55 @@ export default fetchMovies;
 //     .join('');
 
 //   container.innerHTML = movieHTML;
+// }
+
+// ===========renderStartMovies   перший варіант (погано читався)==============
+
+// async function renderStartMovies() {
+//   try {
+//     const movies = await fetchMovies();
+//     renderMovies(movies);
+
+//     const imgStartElements = document.querySelectorAll('.img-start');
+
+//     imgStartElements.forEach((imgStartElement, index) => {
+//       imgStartElement.addEventListener('click', async () => {
+//         const movieDetails = await fetchMovieDetails(movies[index].id);
+//         showModal(movieDetails);
+//       });
+//     });
+
+//     const modalOverlay = document.querySelector('.modal__overlay');
+
+//     modalOverlay.addEventListener('click', () => {
+//       const modal = document.querySelector('.modal');
+//       modal.style.display = 'none';
+//     });
+//   } catch (error) {
+//     console.error(error);
+//     throw new Error('Error rendering start movies');
+//   }
+// }
+
+// async function renderStartMovies() {
+//   const movies = await fetchMovies();
+//   renderMovies(movies);
+
+//   const imgStartElements = document.querySelectorAll('.img-start');
+
+//   imgStartElements.forEach((imgStartElement, index) => {
+//     imgStartElement.addEventListener('click', async () => {
+//       const movieDetails = await fetchMovieDetails(movies[index].id);
+//       showModal(movieDetails);
+//     });
+//   });
+
+//   const modalOverlay = document.querySelector('.modal__overlay');
+
+//   modalOverlay.addEventListener('click', () => {
+//     const modal = document.querySelector('.modal');
+//     modal.style.display = 'none';
+//   });
 // }
 
 // ==========Намагався зробити пагінацію=========
