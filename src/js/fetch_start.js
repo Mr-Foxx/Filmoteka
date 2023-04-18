@@ -1,7 +1,7 @@
 import axios from 'axios';
 import $ from 'jquery';
 import Notiflix from 'notiflix';
-//import XXX from './library';
+// import CLICK from './click';
 
 const container = document.querySelector('.gallery-start');
 
@@ -93,12 +93,27 @@ async function fetchMovieDetails(movieId) {
   }
 }
 
-function click(movie) {
-  console.log('fn click in library');
+// =
 
+// =
+
+function click(movie) {
   const watchedBtn = document.querySelector('.modal__button-watched');
   const queueBtn = document.querySelector('.modal__button-queue');
-  //   const queueContainet = document.querySelector('.queue-container');
+
+  // =watchedBtn при натисканні на кнопку первіряє по ід чи є фільм в локал та змінює напис кнопки
+
+  const storedWatchedMovies =
+    JSON.parse(localStorage.getItem('watchMovies')) || [];
+
+  const isWatchedMovieExists = storedWatchedMovies.some(
+    storedMovie => storedMovie.id === movie.id
+  );
+  if (isWatchedMovieExists) {
+    watchedBtn.textContent = 'REMOVE FROM WATCHED';
+  } else {
+    watchedBtn.textContent = 'ADD TO WATCHED';
+  }
 
   watchedBtn.addEventListener('click', () => {
     let storedMovies = JSON.parse(localStorage.getItem('watchMovies')) || [];
@@ -112,14 +127,29 @@ function click(movie) {
         storedMovie => storedMovie.id !== movie.id
       );
       Notiflix.Notify.info('movie removed from watched');
+      watchedBtn.textContent = 'ADD TO WATCHED';
     } else {
       storedMovies.push(movie);
       Notiflix.Notify.success('Movie added to watch');
+      watchedBtn.textContent = 'REMOVE FROM WATCHED';
     }
 
     localStorage.setItem('watchMovies', JSON.stringify(storedMovies));
-    //renderMovies(storedMovies);
   });
+
+  // = queueBtn
+
+  const storedQueueMovies =
+    JSON.parse(localStorage.getItem('queueMovies')) || [];
+
+  const isQueueMovieExists = storedQueueMovies.some(
+    storedMovie => storedMovie.id === movie.id
+  );
+  if (isQueueMovieExists) {
+    queueBtn.textContent = 'REMOVE FROM WATCHED';
+  } else {
+    queueBtn.textContent = 'ADD TO WATCHED';
+  }
 
   queueBtn.addEventListener('click', () => {
     let storedQueueMovies =
@@ -134,13 +164,14 @@ function click(movie) {
         storedMovie => storedMovie.id !== movie.id
       );
       Notiflix.Notify.info('movie removed from watched');
+      queueBtn.textContent = 'ADD TO QUEUQ';
     } else {
       storedQueueMovies.push(movie);
       Notiflix.Notify.success('Movie added to watch');
+      queueBtn.textContent = 'REMOVE FROM QUEUQ';
     }
 
     localStorage.setItem('queueMovies', JSON.stringify(storedQueueMovies));
-    //renderMovies(storedMovies);
   });
 }
 

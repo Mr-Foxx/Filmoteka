@@ -1,18 +1,65 @@
 import axios from 'axios';
+import Notiflix from 'notiflix';
 
-const BASE_URL = 'https://api.themoviedb.org/3/';
+// const BASE_URL = 'https://api.themoviedb.org/3/';
 const KEY = '9658d89d84efdefd667887b926d66a88';
 
+const watchLibraryBtn = document.querySelector('.button__libraty-watched');
+const queueLibraryBtn = document.querySelector('.button__library-queue');
 const watchContainer = document.querySelector('.lib__watched-container');
 const queueContainer = document.querySelector('.lib__queue-container');
+const emptyCountainer = document.querySelector('.empty-page');
+const emptyContQueue = document.querySelector('.empty-page-queue');
 
-const storedMovies = JSON.parse(localStorage.getItem('watchMovies')) || [];
-renderWatchMovies(storedMovies);
-console.log(storedMovies);
+// queueContainer.style.display = 'none';
+queueContainer.style.transform = 'scale(0)';
+watchLibraryBtn.classList.add('library_btn-click-color');
 
-const storedQueueMovies = JSON.parse(localStorage.getItem('queueMovies')) || [];
-renderQueueMovies(storedQueueMovies);
-console.log(storedQueueMovies);
+watchLibraryBtn.addEventListener('click', openWatched);
+queueLibraryBtn.addEventListener('click', openQueue);
+
+function openWatched() {
+  // queueContainer.style.display = 'none';
+  queueContainer.style.transform = 'scale(0)';
+  // watchContainer.style.display = 'block';
+  watchContainer.style.transform = 'scale(1)';
+  watchLibraryBtn.classList.add('library_btn-click-color');
+  queueLibraryBtn.classList.remove('library_btn-click-color');
+
+  const storedMovies = JSON.parse(localStorage.getItem('watchMovies')) || [];
+  console.log(storedMovies.length);
+  if (storedMovies.length === 0) {
+    watchContainer.innerHTML = '<p>There are no films in this gallery</p>';
+    return;
+  }
+
+  renderWatchMovies(storedMovies);
+  console.log(storedMovies);
+}
+
+function openQueue() {
+  // watchContainer.style.display = 'none';
+  watchContainer.style.transform = 'scale(0)';
+  // queueContainer.style.display = 'block';
+  queueContainer.style.transform = 'scale(1)';
+  queueLibraryBtn.classList.add('library_btn-click-color');
+  watchLibraryBtn.classList.remove('library_btn-click-color');
+
+  const storedQueueMovies =
+    JSON.parse(localStorage.getItem('queueMovies')) || [];
+  console.log(storedQueueMovies.length);
+  if (storedQueueMovies.length === 0) {
+    queueContainer.innerHTML = '<p>There are no films in this gallery</p>';
+    return;
+  }
+
+  renderQueueMovies(storedQueueMovies);
+  console.log(storedQueueMovies);
+}
+
+openWatched();
+
+openQueue();
 
 const genres = {
   28: 'Action',
@@ -98,6 +145,42 @@ function renderQueueMovies(movies) {
   addOverlayClickListener();
 }
 
+function renderAfterDelitingObjectWatch(movie) {
+  const storedWatchedMovies =
+    JSON.parse(localStorage.getItem('watchMovies')) || [];
+
+  const isWatchedMovieExists = storedWatchedMovies.some(
+    storedMovie => storedMovie.id === movie.id
+  );
+  if (isWatchedMovieExists) {
+    const updatedWatchedMovies = storedWatchedMovies.filter(
+      storedMovie => storedMovie.id !== movie.id
+    );
+
+    localStorage.setItem('watchMovies', JSON.stringify(updatedWatchedMovies));
+
+    renderWatchMovies(updatedWatchedMovies);
+  }
+}
+
+function renderAfterDelitingObjectQueue(movie) {
+  const storedQueueMovies =
+    JSON.parse(localStorage.getItem('queueMovies')) || [];
+
+  const isQueueMovieExists = storedQueueMovies.some(
+    storedMovie => storedMovie.id === movie.id
+  );
+  if (isQueueMovieExists) {
+    const updatedQueueMovies = storedQueueMovies.filter(
+      storedMovie => storedMovie.id !== movie.id
+    );
+
+    localStorage.setItem('queueMovies', JSON.stringify(updatedQueueMovies));
+
+    renderQueueMovies(updatedQueueMovies);
+  }
+}
+
 // ==Modal Functions
 
 async function fetchMovieDetails(movieId) {
@@ -142,20 +225,89 @@ function showModal(movie) {
 
   const modal = document.querySelector('.modal');
   modal.style.display = 'block';
+
+  click(movie);
 }
 
-// async function renderStartMovies() {
-//   try {
-//     // const movies = await fetchMovies();
-//     // renderMovies(movies);
+function click(movie) {
+  const watchedBtn = document.querySelector('.modal__button-watched');
+  const queueBtn = document.querySelector('.modal__button-queue');
 
-//     addClickEventListeners(movies);
-//     addOverlayClickListener();
-//   } catch (error) {
-//     console.error(error);
-//     throw new Error('Error rendering start movies');
-//   }
-// }
+  // =watchedBtn при натисканні на кнопку первіряє по ід чи є фільм в локал та змінює напис кнопки
+
+  const storedWatchedMovies =
+    JSON.parse(localStorage.getItem('watchMovies')) || [];
+
+  const isWatchedMovieExists = storedWatchedMovies.some(
+    storedMovie => storedMovie.id === movie.id
+  );
+  if (isWatchedMovieExists) {
+    watchedBtn.textContent = 'REMOVE FROM WATCHED';
+  } else {
+    watchedBtn.textContent = 'ADD TO WATCHED';
+  }
+
+  watchedBtn.addEventListener('click', () => {
+    let storedMovies = JSON.parse(localStorage.getItem('watchMovies')) || [];
+
+    const isMovieExists = storedMovies.some(
+      storedMovie => storedMovie.id === movie.id
+    );
+
+    if (isMovieExists) {
+      storedMovies = storedMovies.filter(
+        storedMovie => storedMovie.id !== movie.id
+      );
+      Notiflix.Notify.info('movie removed from watched');
+      watchedBtn.textContent = 'ADD TO WATCHED';
+      renderAfterDelitingObjectWatch(movie);
+    } else {
+      storedMovies.push(movie);
+      Notiflix.Notify.success('Movie added to watch');
+      watchedBtn.textContent = 'REMOVE FROM WATCHED';
+    }
+
+    localStorage.setItem('watchMovies', JSON.stringify(storedMovies));
+  });
+
+  // = queueBtn
+
+  const storedQueueMovies =
+    JSON.parse(localStorage.getItem('queueMovies')) || [];
+
+  const isQueueMovieExists = storedQueueMovies.some(
+    storedMovie => storedMovie.id === movie.id
+  );
+  if (isQueueMovieExists) {
+    queueBtn.textContent = 'REMOVE FROM QUEUE';
+  } else {
+    queueBtn.textContent = 'ADD TO QUEUE';
+  }
+
+  queueBtn.addEventListener('click', () => {
+    let storedQueueMovies =
+      JSON.parse(localStorage.getItem('queueMovies')) || [];
+
+    const isMovieExists = storedQueueMovies.some(
+      storedMovie => storedMovie.id === movie.id
+    );
+
+    if (isMovieExists) {
+      storedQueueMovies = storedQueueMovies.filter(
+        storedMovie => storedMovie.id !== movie.id
+      );
+      Notiflix.Notify.info('movie removed from watched');
+      queueBtn.textContent = 'ADD TO QUEUQ';
+      renderAfterDelitingObjectQueue(movie);
+    } else {
+      storedQueueMovies.push(movie);
+      Notiflix.Notify.success('Movie added to watch');
+      queueBtn.textContent = 'REMOVE FROM QUEUQ';
+    }
+
+    localStorage.setItem('queueMovies', JSON.stringify(storedQueueMovies));
+  });
+}
 
 // Функція, що додає події на зображення фільмів
 function addClickEventListeners(movies) {
@@ -163,8 +315,12 @@ function addClickEventListeners(movies) {
 
   imgStartElements.forEach((imgStartElement, index) => {
     imgStartElement.addEventListener('click', async () => {
-      const movieDetails = await fetchMovieDetails(movies[index].id);
-      showModal(movieDetails);
+      try {
+        const movieDetails = await fetchMovieDetails(movies[index].id);
+        showModal(movieDetails);
+      } catch (error) {
+        throw new Error(error.message);
+      }
     });
   });
 }
@@ -179,7 +335,16 @@ function addOverlayClickListener() {
   });
 }
 
-// renderStartMovies();
+// ==
+
+// const savedData1 = JSON.parse(localStorage.getItem('watchMovies'));
+// // console.log(savedData1.length);
+// // console.log(123123);
+// if (savedData1.length > 0) {
+//   // emptyCountainer.style.display = 'none';
+//   emptyCountainer.classList.add('is-hidden');
+// }
+// emptyContQueue.classList.add('is-hidden');
 
 // ==
 
