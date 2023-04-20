@@ -52,6 +52,21 @@
 //             display: flex;
 // }
 
+.visibility-none {
+    // transform: scale(0);
+    // height: 0;
+    // width: 0;
+    // padding: 0;
+    // border: 0;
+    // margin: 0;
+    display: none;
+}
+
+.visibility-block {
+    // transform: scale(1)
+    display: block;
+}
+
 .lib__watched-container{width: 100%;
     flex-wrap: wrap;
     justify-content: center;

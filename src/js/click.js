@@ -1,4 +1,4 @@
-// =
+import Notiflix from 'notiflix';
 
 function click(movie) {
   const watchedBtn = document.querySelector('.modal__button-watched');
@@ -78,4 +78,4 @@ function click(movie) {
   });
 }
 
-export default { click };
+export { click };

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import Notiflix from 'notiflix';
+import { genres } from './genres';
 
 // const BASE_URL = 'https://api.themoviedb.org/3/';
 const KEY = '9658d89d84efdefd667887b926d66a88';
@@ -11,18 +12,15 @@ const queueContainer = document.querySelector('.lib__queue-container');
 const emptyCountainer = document.querySelector('.empty-page');
 const emptyContQueue = document.querySelector('.empty-page-queue');
 
-// queueContainer.style.display = 'none';
-queueContainer.style.transform = 'scale(0)';
+queueContainer.classList.add('visibility-none');
 watchLibraryBtn.classList.add('library_btn-click-color');
 
 watchLibraryBtn.addEventListener('click', openWatched);
 queueLibraryBtn.addEventListener('click', openQueue);
 
 function openWatched() {
-  // queueContainer.style.display = 'none';
-  queueContainer.style.transform = 'scale(0)';
-  // watchContainer.style.display = 'block';
-  watchContainer.style.transform = 'scale(1)';
+  queueContainer.innerHTML = '';
+
   watchLibraryBtn.classList.add('library_btn-click-color');
   queueLibraryBtn.classList.remove('library_btn-click-color');
 
@@ -34,14 +32,11 @@ function openWatched() {
   }
 
   renderWatchMovies(storedMovies);
-  console.log(storedMovies);
 }
 
 function openQueue() {
-  // watchContainer.style.display = 'none';
-  watchContainer.style.transform = 'scale(0)';
-  // queueContainer.style.display = 'block';
-  queueContainer.style.transform = 'scale(1)';
+  watchContainer.innerHTML = '';
+
   queueLibraryBtn.classList.add('library_btn-click-color');
   watchLibraryBtn.classList.remove('library_btn-click-color');
 
@@ -56,32 +51,8 @@ function openQueue() {
   renderQueueMovies(storedQueueMovies);
   console.log(storedQueueMovies);
 }
-
-openWatched();
-
 openQueue();
-
-const genres = {
-  28: 'Action',
-  12: 'Adventure',
-  16: 'Animation',
-  35: 'Comedy',
-  80: 'Crime',
-  99: 'Documentary',
-  18: 'Drama',
-  10751: 'Family',
-  14: 'Fantasy',
-  36: 'History',
-  27: 'Horror',
-  10402: 'Music',
-  9648: 'Mystery',
-  10749: 'Romance',
-  878: 'Science Fiction',
-  10770: 'TV Movie',
-  53: 'Thriller',
-  10752: 'War',
-  37: 'Western',
-};
+openWatched();
 
 function renderWatchMovies(movies) {
   // if (!movies || !Array.isArray(movies) || movies.length === 0) {
@@ -181,6 +152,28 @@ function renderAfterDelitingObjectQueue(movie) {
   }
 }
 
+function renderAfterAddingObjectWatch(movie) {
+  const storedWatchedMovies =
+    JSON.parse(localStorage.getItem('watchMovies')) || [];
+
+  storedWatchedMovies.push(movie);
+
+  localStorage.setItem('watchMovies', JSON.stringify(storedWatchedMovies));
+
+  renderWatchMovies(storedWatchedMovies);
+}
+
+function renderAfterAddingObjectQueue(movie) {
+  const storedQueueMovies =
+    JSON.parse(localStorage.getItem('queueMovies')) || [];
+
+  storedQueueMovies.push(movie);
+
+  localStorage.setItem('queueMovies', JSON.stringify(storedQueueMovies));
+
+  renderQueueMovies(storedQueueMovies);
+}
+
 // ==Modal Functions
 
 async function fetchMovieDetails(movieId) {
@@ -213,9 +206,9 @@ function showModal(movie) {
             ? movie.genres.map(genre => genre.name).join(', ')
             : ''
         }</p>
-        <p class="abaut"> ABOUT </p> 
+        <p class="abaut"> ABOUT </p>
         <p>  Description: ${movie.overview}</p> <!-- Доданий опис -->
-        <div class="modal__buttons"> 
+        <div class="modal__buttons">
           <button class="modal__button-watched">ADD TO WATCHED</button>
           <button class="modal__button-queue">ADD TO QUEUE</button>
         </div>
@@ -265,6 +258,7 @@ function click(movie) {
       storedMovies.push(movie);
       Notiflix.Notify.success('Movie added to watch');
       watchedBtn.textContent = 'REMOVE FROM WATCHED';
+      renderAfterAddingObjectWatch(movie);
     }
 
     localStorage.setItem('watchMovies', JSON.stringify(storedMovies));
@@ -303,6 +297,7 @@ function click(movie) {
       storedQueueMovies.push(movie);
       Notiflix.Notify.success('Movie added to watch');
       queueBtn.textContent = 'REMOVE FROM QUEUQ';
+      renderAfterAddingObjectQueue(movie);
     }
 
     localStorage.setItem('queueMovies', JSON.stringify(storedQueueMovies));

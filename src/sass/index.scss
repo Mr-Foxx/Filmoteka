@@ -9,17 +9,8 @@
     padding-top: 42px;
     padding-bottom: 89px;
 }
-// .container{
-//         max-width: 1280px;
-//             align-items: center;
-//             // margin-bottom: 60px;
-//             margin-left: auto;
-//             margin-right: auto;
-//             padding-top: 40px;
-//             padding-left: 80px;
-//             // padding-right: 20px;
-//             display: flex;
-// }
+
+
 
 .container {
     margin-left: auto;
@@ -60,7 +51,7 @@
     background-color: #FFFFFF;
     border-radius: 100px;
     border: none;
-    // border-bottom: 0.5px solid #fff;
+        margin-left: 40px;
     position: relative;
     
 }
@@ -232,20 +223,178 @@
     display: flex;
 }
 
-// ======watched queue button=======
+// ==========Footer
 
-// .button_watched{
-//     width: 120px;
-//         height: 42px;
-//         // color: #fff;
-//         background-color: #FFFFFF;
-//         border-radius: 100px;
-// }
+footer {
+    background-color: #f7f7f7;
+}
 
-// .button_queue {
-//     width: 86px;
-//     height: 42px;
-//     // color: #fff;
-//     background-color: #FFFFFF;
-//     border-radius: 100px
-// }
+.footer__container {
+    // margin-top: 440px;
+    background: #F7F7F7;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 12px;
+    padding: 29px;
+
+    @media screen and (min-width: 768px) {
+        flex-direction: row;
+        gap: 6px;
+    }
+}
+
+.footer__copyright {
+    text-align: center;
+    font-size: 14px;
+
+    color: #545454;
+
+    @media screen and (min-width: 768px) {
+        font-size: 16px;
+    }
+}
+
+.footer__team {
+    color: #545454;
+    font-size: 14px;
+
+    @media screen and (min-width: 768px) {
+        font-size: 16px;
+    }
+}
+
+.footer__icon {
+    display: inline-block;
+    -webkit-animation: 3s heartbeat infinite;
+}
+
+.footer__team-link {
+    display: inline-block;
+    color: #545454;
+}
+
+@-webkit-keyframes heartbeat {
+    0% {}
+
+    40% {
+        scale: 1;
+    }
+
+    42% {
+        scale: 1.4;
+    }
+
+    44% {
+        scale: 1;
+    }
+
+    50% {
+        scale: 1;
+    }
+
+    52% {
+        scale: 1.4;
+    }
+
+    54% {
+        scale: 1;
+    }
+
+    100% {}
+}
+
+;
+
+
+// ============  пагінація
+
+.pagination {
+    // @include flexCenter();
+    display: flex;
+        align-items: center;
+        justify-content: center;
+
+    &__list {
+        display: flex;
+        padding: 8px;
+    }
+
+    & li {
+        // @include flexCenter();
+        display: flex;
+            align-items: center;
+            justify-content: center;
+
+        height: 36px;
+        width: 36px;
+        border-radius: 5px;
+
+        font-weight: 500;
+        font-size: 12px;
+        line-height: 1.33;
+
+        list-style: none;
+        text-align: center;
+        cursor: pointer;
+
+        // @include transition();
+                transition-property: all, null;
+                transition-duration: 250ms;
+                transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+            
+    }
+
+    &__arrow {
+        background-color: #79767671;
+        margin-left: 5px;
+        margin-right: 5px;
+
+        &--prev {
+            // @include flexCenter;
+            display: flex;
+                align-items: center;
+                justify-content: center;
+            background-image: url('../images/arrow-left.svg');
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        &--next {
+            // @include flexCenter;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-image: url('../images/arrow-right.svg');
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+    }
+
+    li.pagination__dots,
+    li.pagination__numb-first,
+    li.pagination__numb-last {
+        display: none;
+
+        // @include tablet {
+        //     display: flex;
+        // }
+    }
+
+    &__numb.active,
+    &__numb:hover,
+    &__numb:focus,
+    &__arrow:hover,
+    &__arrow:focus,
+    &__numb-first:hover,
+    &__numb-first:focus,
+    &__numb-last:hover,
+    &__numb-last:focus {
+        background-color: #948f8f;
+    }
+
+    &.is-hidden {
+        display: none;
+    }
+}
